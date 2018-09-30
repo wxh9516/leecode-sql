@@ -69,6 +69,11 @@ SET sex = CASE WHEN sex = 'm' THEN 'f'
                   WHEN sex = 'f' THEN 'm' END
 WHERE id IN (1,2,3,4);   #???where
 
+#2.1
+UPDATE salary SET sex = IF(sex = 'm', 'f', 'm')   #???
+
+#IF(condition, value_if_true, value_if_false)
+
 #3.
 #CASE expression
 #    WHEN condition1 THEN result1
