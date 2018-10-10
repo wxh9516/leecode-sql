@@ -1,0 +1,73 @@
+#Write a SQL query to find all duplicate emails in a table named Person.
+#+----+---------+
+#| Id | Email   |
+#+----+---------+
+#| 1  | a@b.com |
+#| 2  | c@d.com |
+#| 3  | a@b.com |
+#+----+---------+
+
+
+#For example, your query should return the following for the above table:
+#+---------+
+#| Email   |
+#+---------+
+#| a@b.com |
+#+---------+
+
+show databases;
+use test_one;
+CREATE TABLE person (
+  id INT NOT NULL,
+  email VARCHAR(30) NOT NULL,
+  primary key (id)
+);
+
+INSERT INTO person 
+    (id,email) 
+VALUES 
+    (1,"a@b.com"),
+    (2,"c@d.com"),
+    (3,"a@b.com");
+
+select * from person;
+
+#1.
+#group by: The GROUP BY statement is often used with aggregate 
+#functions (COUNT, MAX, MIN, SUM, AVG) to group the result-set by one 
+#or more columns.
+
+#SELECT column_name(s)
+#FROM table_name
+#WHERE condition
+#GROUP BY column_name(s)
+#ORDER BY column_name(s);
+
+#2.
+#count(): 
+#The COUNT() function returns the number of rows that matches a 
+#specified criteria.
+
+#COUNT(DISTINCT column_name)
+#SELECT DISTINCT returns only distinct (different) values.
+
+#count(*)
+#count(distinct column_name)
+
+
+#The AVG() function returns the average value of a numeric column.
+#The SUM() function returns the total sum of a numeric column.
+
+#3. 
+select email from person
+group by email
+having count(email)>1;   #having count(*)>1;
+
+#4. 
+#having
+#SELECT column_name(s)
+#FROM table_name
+#WHERE condition
+#GROUP BY column_name(s)
+#HAVING condition
+#ORDER BY column_name(s);
