@@ -67,10 +67,11 @@ VALUES
 UPDATE salary
 SET sex = CASE WHEN sex = 'm' THEN 'f' 
                   WHEN sex = 'f' THEN 'm' END
-WHERE id IN (1,2,3,4);   #???where
+WHERE id IN (1,2,3,4);   #???
+#where id>0;
 
 #2.1
-UPDATE salary SET sex = IF(sex = 'm', 'f', 'm')   #???
+UPDATE salary SET sex = IF(sex = 'm', 'f', 'm');   #???error
 
 #IF(condition, value_if_true, value_if_false)
 
