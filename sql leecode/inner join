@@ -1,0 +1,32 @@
+#The Employee table holds all employees including their managers. 
+#Every employee has an Id, and there is also a column for the manager Id.
+
+#+----+-------+--------+-----------+
+#| Id | Name  | Salary | ManagerId |
+#+----+-------+--------+-----------+
+#| 1  | Joe   | 70000  | 3         |
+#| 2  | Henry | 80000  | 4         |
+#| 3  | Sam   | 60000  | NULL      |
+#| 4  | Max   | 90000  | NULL      |
+#+----+-------+--------+-----------+
+#Given the Employee table, write a SQL query that finds out employees 
+#who earn more than their managers. For the above table, 
+#Joe is the only employee who earns more than his manager.
+
+#(there is another table b recording salary of manager)
+
+#+----------+
+#| Employee |
+#+----------+
+#| Joe      |
+#+----------+
+
+#1. 
+#left join(左联接) 返回包括左表中的所有记录和右表中联结字段相等的记录 
+#right join(右联接) 返回包括右表中的所有记录和左表中联结字段相等的记录
+#inner join(等值连接) 只返回两个表中联结字段相等的行
+
+#2.
+select a.Name as Employee from Employee as a
+inner join b on a.ManagerId=b.Id 
+where a.Salary>b.Salary;
