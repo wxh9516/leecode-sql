@@ -1,0 +1,69 @@
+#There is a table courses with columns: student and class
+
+#Please list out all classes which have more than or equal to 5 students.
+
+#For example, the table:
+
+#+---------+------------+
+#| student | class      |
+#+---------+------------+
+#| A       | Math       |
+#| B       | English    |
+#| C       | Math       |
+#| D       | Biology    |
+#| E       | Math       |
+#| F       | Computer   |
+#| G       | Math       |
+#| H       | Math       |
+#| I       | Math       |
+#+---------+------------+
+#Should output:
+
+#+---------+
+#| class   |
+#+---------+
+#| Math    |
+#+---------+
+#Note:
+#The students should not be counted duplicate in each course.
+
+show databases;
+use test_one;
+CREATE TABLE table1 (
+  student varchar(6) NOT NULL,
+  class VARCHAR(30) NOT NULL,
+  primary key (student)
+);
+
+INSERT INTO table1 
+    (student,class) 
+VALUES 
+    ("A","math"),
+    ("B","English"),
+    ("C","math"),
+    ("D","biology"),
+    ("E","math"),
+    ("F","computer"),
+    ("G","math"),
+    ("H","math"),
+    ("I","math");
+
+select * from table1;
+
+select class from table1
+group by class   #!!!
+having count(distinct student)>=5;   #student not class
+
+#try:    #different comparing to before
+select class from table1
+group by class;
+
+#distinct
+#SELECT DISTINCT column1, column2, ...
+#FROM table_name;
+
+#SELECT COUNT(DISTINCT Country) FROM Customers;
+
+#group by
+#The GROUP BY statement is often used with aggregate 
+#functions (COUNT, MAX, MIN, SUM, AVG) to group the result-set by one or more columns.
