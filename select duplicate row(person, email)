@@ -61,7 +61,7 @@ select * from person;
 #3. 
 select email from person
 group by email
-having count(email)>1;   #having count(*)>1;
+having count(email)>1;   #having count(*)>1;   or   count(Id)
 
 #4. 
 #having
