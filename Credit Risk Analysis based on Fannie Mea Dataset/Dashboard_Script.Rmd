@@ -1,0 +1,342 @@
+---
+title: "Credit Analysis: Loan Default Prediction"
+output: 
+  flexdashboard::flex_dashboard:
+    vertical_layout: scroll
+    theme: cosmo
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(ggplot2)
+library(readr)
+library(highcharter)
+library(dplyr)
+library(plotly)
+
+setwd('C:/Users/Jimit/Desktop/FE550/FE550Proj')
+
+library(highcharter)
+load("CScore.rda")
+load("post.RData")
+load("during.RData")
+load("pre.RData")
+load("dfAfter.RData")
+
+
+x <- rbind(d2000, d2001)$CSCORE_B
+
+library(plotly)
+D1=density(na.omit(rbind(d2000, d2001)$CSCORE_B),2)
+D2=density(na.omit(rbind(d2002, d2003)$CSCORE_B),2)
+D3=density(na.omit(rbind(d2004, d2005)$CSCORE_B),2)
+D4=density(na.omit(rbind(d2006, d2007)$CSCORE_B),2)
+D5=density(na.omit(rbind(d2008, d2009)$CSCORE_B),2)
+D6=density(na.omit(rbind(d2010, d2011)$CSCORE_B),2)
+D7=density(na.omit(rbind(d2012, d2013)$CSCORE_B),2)
+D8=density(na.omit(rbind(d2014, d2015)$CSCORE_B),2)
+D9=density(na.omit(rbind(d2016, d2017)$CSCORE_B),2)
+
+
+df1=data.frame(cbind(x = D1$x, z = rep("2000-2001", 512), y = D1$y))
+df2=data.frame(cbind(x = D2$x, z = rep("2002-2003", 512), y = D2$y))
+df3=data.frame(cbind(x = D3$x, z = rep("2004-2005", 512), y = D3$y))
+df4=data.frame(cbind(x = D4$x, z = rep("2006-2007", 512), y = D4$y))
+df5=data.frame(cbind(x = D5$x, z = rep("2008-2009", 512), y = D5$y))
+df6=data.frame(cbind(x = D6$x, z = rep("2010-2011", 512), y = D6$y))
+df7=data.frame(cbind(x = D7$x, z = rep("2012-2013", 512), y = D7$y))
+df8=data.frame(cbind(x = D8$x, z = rep("2014-2015", 512), y = D8$y))
+df9=data.frame(cbind(x = D9$x, z = rep("2016-2017", 512), y = D9$y))
+
+
+
+df=rbind(df1,df2,df3,df4,df5,df6,df7,df8,df9)
+df=as.data.frame(df)
+df$z=as.factor(df$z)
+
+load("df2.RData")
+
+```
+
+Visualization {data-orientation=rows data-icon="fa-bar-chart"}
+=====================================
+
+## Row 1 {data-height=120}
+
+### Number of Loans Pre Financial Crisis
+
+```{r}
+valueBox("16.3 Million", color="rgb(100,100,100)")
+```
+
+### Number of Loans During Financial Crisis
+
+```{r}
+valueBox("11.2 Million", color="rgb(200,100,100)")
+```
+
+### Number of Loans Post Financial Crisis
+
+```{r}
+valueBox("11.4 Million", color="#154360")
+```    
+
+## Row 2 {data-height=750}  
+
+### Comparison of Borrower's Credit Scores
+    
+```{r}
+
+x <- na.omit(df_pre_crisis$CSCORE_B)
+y <- na.omit(df_dur_crisis$CSCORE_B)
+z <- na.omit(df_post_crisis$CSCORE_B)
+
+hchart(density(x, bw=7), area = F, name = "Pre Crisis") %>%
+  hc_add_series(density(y, bw=7), area = F, name = "During Crisis") %>%
+  hc_add_series(density(z, bw=7), area = F, name = "Post Crisis") %>% 
+  hc_yAxis(title=list(text='Frequency')) %>% 
+  hc_xAxis(title=list(text='Credit Score')) %>%
+  hc_add_theme(hc_theme_smpl())
+
+```
+
+## Row 3 {data-height=750}  
+
+### Comparison of Borrower's Interest Rate
+    
+```{r}
+
+x <- na.omit(df_pre_crisis$ORIG_RT.x)
+y <- na.omit(df_dur_crisis$ORIG_RT.x)
+z <- na.omit(df_post_crisis$ORIG_RT.x)
+
+hchart(density(x, bw=1), area = F, name = "Pre Crisis") %>%
+  hc_add_series(density(y, bw=1), area = F, name = "During Crisis") %>%
+  hc_add_series(density(z, bw=1), area = F, name = "Post Crisis") %>% 
+  hc_yAxis(title=list(text='Frequency')) %>% 
+  hc_xAxis(title=list(text='Interest Rate')) %>%
+  hc_add_theme(hc_theme_smpl())
+
+```
+
+## Row 4 {data-height=750}  
+
+### Comparison of Borrower's Debt to Income Ratio (DTI)
+    
+```{r}
+
+x <- na.omit(df_pre_crisis$DTI)
+y <- na.omit(df_dur_crisis$DTI)
+z <- na.omit(df_post_crisis$DTI)
+
+hchart(density(x, bw=2), area = F, name = "Pre Crisis") %>%
+  hc_add_series(density(y, bw=2), area = F, name = "During Crisis") %>%
+  hc_add_series(density(z, bw=2), area = F, name = "Post Crisis") %>% 
+  hc_yAxis(title=list(text='Frequency')) %>% 
+  hc_xAxis(title=list(text='DTI')) %>%
+  hc_add_theme(hc_theme_smpl())
+
+```
+
+## Row 5 {data-height=750}  
+
+### Comparison of Borrower's Original Loan to Value (OLTV)
+    
+```{r}
+
+x <- na.omit(df_pre_crisis$OLTV)
+y <- na.omit(df_dur_crisis$OLTV)
+z <- na.omit(df_post_crisis$OLTV)
+
+hchart(density(x, bw=2), area = F, name = "Pre Crisis") %>%
+  hc_add_series(density(y, bw=2), area = F, name = "During Crisis") %>%
+  hc_add_series(density(z, bw=2), area = F, name = "Post Crisis") %>% 
+  hc_yAxis(title=list(text='Frequency')) %>% 
+  hc_xAxis(title=list(text='OLTV')) %>%
+  hc_add_theme(hc_theme_smpl())
+
+```
+
+## Row 6 {data-height=950}  
+
+### Distribution of Credit Score
+    
+```{r}
+
+
+axx <- list(
+  title = "Credit Score"
+)
+
+axy <- list(
+  title = "Year"
+)
+
+axz <- list(
+  title = "Frequency"
+)
+
+plot_ly(df, x = ~x, y = ~z, z = ~y, group = ~z, type = "scatter3d", 
+        mode = "lines", color=~z, line = list(width = 6))  %>%
+  layout(title = "Distribution of Borrower's  Credit Score", scene = list(xaxis=axx,yaxis=axy,zaxis=axz))
+
+
+```
+
+## Row 7 {data-height=750} 
+
+### Credit Score
+    
+```{r}
+ggplot(databox, aes(x=year, y=CreditScore, fill=Default)) + 
+  geom_boxplot() +
+  xlab('Year') +
+  ylab('Credit Score') +
+  ggtitle('Boxplot: Credit Score') +
+  theme_minimal()
+```
+
+### Interest Rate
+    
+```{r}
+ggplot(databox, aes(x=year, y=OrInterestRate, fill=Default)) + 
+  geom_boxplot() +
+  xlab('Year') +
+  ylab('Interest Rate') +
+  ggtitle('Boxplot: Interest Rate') +
+  theme_minimal()
+```
+
+## Row 8 {data-height=750} 
+
+### Debt to Income
+    
+```{r}
+ggplot(databox, aes(x=year, y=DTIRat, fill=Default)) + 
+  geom_boxplot() +
+  xlab('Year') +
+  ylab('DTI') +
+  ggtitle('Boxplot: Debt to Income') +
+  theme_minimal()
+```
+
+### Loan to Value
+    
+```{r}
+ggplot(databox, aes(x=year, y=OrLTV, fill=Default)) + 
+  geom_boxplot() +
+  xlab('Year') +
+  ylab('LTV') +
+  ggtitle('Boxplot: Loan to Value') +
+  theme_minimal()
+```
+
+## Row 9 {data-height=750} 
+
+### Purpose of Loan versus Loan Default
+    
+```{r}
+x=df2$LoanPurpose[df2$Default==1]
+purpose_default=summary(x)[-4]
+purpose_default=purpose_default/sum(purpose_default)*100
+
+y=df2$LoanPurpose[df2$Default==0]
+purpose_notdefault=summary(y)[-4]
+purpose_notdefault=purpose_notdefault/sum(purpose_notdefault)*100
+
+
+
+Loan.Purpose <- c("Cash-out Refinance", "Purchase", "Refinance")
+
+SF_Zoo <- purpose_default
+LA_Zoo <- purpose_notdefault
+data <- data.frame(Loan.Purpose, LA_Zoo, SF_Zoo)
+
+
+p <- data %>% 
+  plot_ly() %>%
+  add_trace(x = ~Loan.Purpose, y = ~LA_Zoo, type = 'bar', name = 'Not Default',
+            marker = list(color = 'rgba(219, 64, 82, 0.7)',
+                          line = list(color = 'rgba(219, 64, 82, 1.0)', width = 1.5))) %>%
+  add_trace(x = ~Loan.Purpose, y = ~SF_Zoo, type = 'bar', name = 'Default', 
+            marker = list(color = 'rgba(55, 128, 191, 0.7)',
+                          line = list(color = 'rgba(55, 128, 191, 1.0)', width = 1.5))) %>%
+  layout(title = "Purpose of Loan versus Loan Default",
+         barmode = 'group',
+         xaxis = list(title = "Purpose of Loan"),
+         yaxis = list(title = "Percentage"))
+p
+```
+
+### Occupancy Status of Property versus Loan Default
+    
+```{r}
+x=df2$OccStatus[df2$Default==1]
+OccStatus_default=summary(x)
+OccStatus_default=OccStatus_default/sum(OccStatus_default)*100
+
+y=df2$OccStatus[df2$Default==0]
+OccStatus_notdefault=summary(y)
+OccStatus_notdefault=OccStatus_notdefault/sum(OccStatus_notdefault)*100
+
+Occupation.Status <- c("Investment", "Principal Residence", "Second Home")
+LA_Zoo <- OccStatus_notdefault
+SF_Zoo <- OccStatus_default
+data <- data.frame(Occupation.Status, LA_Zoo, SF_Zoo)
+
+p <- data %>% 
+  plot_ly() %>%
+  add_trace(x = ~Occupation.Status, y = ~LA_Zoo, type = 'bar', name = 'Not Default',
+            marker = list(color = 'rgba(219, 64, 82, 0.7)',
+                          line = list(color = 'rgba(219, 64, 82, 1.0)', width = 1.5))) %>%
+  add_trace(x = ~Occupation.Status, y = ~SF_Zoo, type = 'bar', name = 'Default', 
+            marker = list(color = 'rgba(55, 128, 191, 0.7)',
+                          line = list(color = 'rgba(55, 128, 191, 1.0)', width = 1.5))) %>%
+  layout(title = "Occupancy Status of Property versus Loan Default",
+         barmode = 'group',
+         xaxis = list(title = "Occupancy Status"),
+         yaxis = list(title = "Percentage"))
+p
+
+```
+
+
+## Row 10 {data-height=800}  
+
+### Property Type versus Loan Default
+    
+```{r}
+
+x=df2$PropertyType[df2$Default==1]
+Property_default=summary(x)
+Property_default=Property_default/sum(Property_default)*100
+
+y=df2$PropertyType[df2$Default==0]
+Property_notdefault=summary(y)
+Property_notdefault=Property_notdefault/sum(Property_notdefault)*100
+
+Property.Type <- c("Condo", "Cooperative Share", "Manufactured Housing", "Planned Urban Development", "Single Family")
+LA_Zoo <- Property_notdefault
+SF_Zoo <- Property_default
+data <- data.frame(Property.Type, LA_Zoo, SF_Zoo)
+
+
+
+p <- data %>% 
+  plot_ly() %>%
+  add_trace(x = ~Property.Type, y = ~LA_Zoo, type = 'bar', name = 'Not Default',
+            marker = list(color = 'rgba(219, 64, 82, 0.7)',
+                          line = list(color = 'rgba(219, 64, 82, 1.0)', width = 1.5))) %>%
+  add_trace(x = ~Property.Type, y = ~SF_Zoo, type = 'bar', name = 'Default', 
+            marker = list(color = 'rgba(55, 128, 191, 0.7)',
+                          line = list(color = 'rgba(55, 128, 191, 1.0)', width = 1.5))) %>%
+  layout(title = "Property Type versus Loan Default",
+         barmode = 'group',
+         xaxis = list(title = "Property Type"),
+         yaxis = list(title = "Percentage"))
+p
+```
+
+
+
