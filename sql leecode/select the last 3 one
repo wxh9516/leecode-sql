@@ -1,0 +1,19 @@
+题目描述
+查找入职员工时间排名倒数第三的员工所有信息
+CREATE TABLE `employees` (
+`emp_no` int(11) NOT NULL,
+`birth_date` date NOT NULL,
+`first_name` varchar(14) NOT NULL,
+`last_name` varchar(16) NOT NULL,
+`gender` char(1) NOT NULL,
+`hire_date` date NOT NULL,
+PRIMARY KEY (`emp_no`));
+
+#
+with cte as (
+    select emp_no,birth_date,first_name,last_name,gender,
+    hire_date,row_number() over(order by hire_date desc) as rn
+    from employees)
+select emp_no,birth_date,first_name,last_name,gender,hire_date
+from cte where rn=3;
+
